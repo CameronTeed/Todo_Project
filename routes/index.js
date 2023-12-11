@@ -2,15 +2,13 @@
 // Holds admin state and user info
 let userAc = {}
 let admin = undefined
+var keys = require('./config.js');
 // email api stuff
-const email_key = '9afafeb9e79194e51507d4e140312b66'
-const secret_key = '6a654c5c9dc0834137639f77d2a90fc2'
 const Mailjet = require ('node-mailjet');
 const exp = require('constants');
-const mailjet = Mailjet.apiConnect(email_key, secret_key);
+const mailjet = Mailjet.apiConnect(keys.email_key, keys.secret_key);
 const { MongoClient, ObjectId } = require('mongodb');
-const uri = 'mongodb+srv://cameronteed:test@cluster0.ecukpnc.mongodb.net/?retryWrites=true&w=majority'
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const client = new MongoClient(keys.uri, { useNewUrlParser: true, useUnifiedTopology: true });
 var connected = false;
 var isGuest = false;
 const bcrypt = require('bcryptjs');

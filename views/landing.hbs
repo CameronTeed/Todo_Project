@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/styles.css">
+    <title>Message Template</title>
+</head>
+
+<body>
+    <nav>
+        <a href="./index.html">Home</a>
+        {{#if admin}}
+        <a href = "./admin">Admin</a>
+        {{/if}}
+        <a href="./about">About</a>
+        <a href="./account">Account</a>
+        <a href="./logout">Logout</a>
+    </nav>
+    <h1>View, Add, and Create Groups!</h1>
+    <p>{{error}}</p>
+
+    <!-- Message Box -->
+    <label for="message">Add Todo Group:</label>
+    <input type="text" id="message" name="message" placeholder="Add Shared ID Here" required>
+
+    <!-- Submit Button -->
+    <button type="submit" id="addGroup">Submit</button>
+
+    <br>
+    <!-- Message Box -->
+    <br>
+    <label for="create">Create Todo Group:</label>
+    <input type="text" id="create" name="create" placeholder="Group Name" required>
+
+    <!-- Submit Button -->
+    <button type="submit" id="createGroup">Submit</button>
+
+    {{#each pools}}
+    <div class="rounded-box">
+    <p><strong>Shareable ID:</strong> {{this.poolID}}</p>
+    <p><strong>Pool Name:</strong> {{this.poolName}}</p>
+    <button type="button" class="update-status-button" data-message-id="{{this.poolID}}">View Group!</button>
+    </div>
+    {{/each}}
+    <script type="text/javascript" src="./js/script.js"></script>
+</body>
+
+</html>

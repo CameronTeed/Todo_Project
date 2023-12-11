@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/styles.css">
+    <title>Message Template</title>
+</head>
+
+<body>
+    <nav>
+        <a href="./index.html">Home</a>
+        <a href = "./admin">Admin</a>
+        <a href="./about">About</a>
+        <a href="./account">Account</a>
+        <a href="./logout">Logout</a>
+    </nav>
+    <h1>User Accounts</h1>
+
+    {{#if users}}
+        <ul>
+            {{#each users}}
+                <li>
+                    <p><strong>username:</strong> {{this.userName}}</p>
+                    <p><strong>_id:</strong> {{this._id}}</p>
+                    <p><strong>level:</strong> {{this.level}}</p>
+                    <p><strong>email:</strong> {{this.email}}</p>
+                </li>
+            {{/each}}
+        </ul>
+    {{else}}
+        <p>No messages available</p>
+    {{/if}}
+
+    <!-- Form for adding new messages -->
+</body>
+
+</html>

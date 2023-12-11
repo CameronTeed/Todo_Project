@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/styles.css">
+    <title>Message Template</title>
+</head>
+
+<body>
+    <nav>
+        <a href="./index.html">Home</a>
+        {{#if admin}}
+        <a href = "./admin">Admin</a>
+        {{/if}}
+        <a href="./about">About</a>
+        <a href="./account">Account</a>
+        <a href="./logout">Logout</a>
+    </nav>
+    <h1>Message Template</h1>
+    <hr>
+    <p id ="id"><strong>Shareable ID:</strong> {{pools._id}}</p>
+    <p><strong>Pool Name:</strong> {{pools.poolName}}</p>
+    <form id="newMessageForm">
+    <label for="toDo"><strong>Create ToDo:</strong></label>
+    <input type="text" id="toDo" name="toDo" required>
+
+    <!-- Dropdown for "State" -->
+    
+    <select id="state" name="state" required>
+        <option value="Not Started">Not Started</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Completed">Completed</option>
+    </select>
+
+    <!-- Dropdown for "Status" -->
+    <select id="status" name="status" required>
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="Urgent">Urgent</option>
+    </select>
+
+    <button type="button" id = "addMessage">Add Message</button>
+    <hr>
+</form>
+{{#if pools.Messages}}
+    <h2>Messages</h2>
+    {{#each pools.Messages}}
+        
+        <div class='rounded-box{{this.status}}{{this.state}}'>
+            <p><strong>ToDo:</strong> {{this.toDo}}</p>
+            <p><strong>State:</strong> {{this.state}}</p>
+            <p><strong>Status:</strong> {{this.status}}</p>
+            <p><strong>Posted by:</strong> {{this.mID}}</p>
+            <p><strong>Message ID:</strong> {{this._id}}</p>
+            <button type="button" class="update-delete-button" data-message-id="{{this._id}}">Delete</button>
+            <button type="button" class="update-status-button" data-message-id="{{this._id}}">Update Status!</button>
+            <select id="value+{{this._id}}" name="status" required>
+                <option value="Completed">Completed</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Not Started">Not Started</option>
+            </select>
+        </div>
+    {{/each}}
+{{else}}
+    <p>No messages available</p>
+{{/if}}
+
+    <!-- Form for adding new messages -->
+<script type="text/javascript" src="./js/landing.js"></script>
+</body>
+
+</html>

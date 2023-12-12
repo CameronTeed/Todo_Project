@@ -26,4 +26,15 @@ Make sure you have the following software installed before running the applicati
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/your-project.git
+   git clone https://github.com/CameronTeed/Todo_Project
+
+# Usage
+
+Go to parent directory and start server.js
+
+# Contributing
+
+Fork Branch and create pull request
+
+# License
+Free use

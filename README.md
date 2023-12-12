@@ -1,6 +1,6 @@
-# Your Project Name
+# Todo - Collaborative Todo lists
 
-A brief description of your project. Include its purpose, main features, and any other relevant information.
+Splitting up tasks have never been easier. This website implements a Mongo DB database to store users and todo lists, with a server running node js.
 
 ## Table of Contents
 

@@ -105,10 +105,10 @@ exports.getPool = async function(request, response){
                     });
                 
                     // Render the page with the pool
-                response.render('index', {admin: request.session.admin, pools: pool });
+                response.render('lists', {admin: request.session.admin, pools: pool });
             } else {
                 // Error if the pool is not found
-                response.render('index', {error: "Error", admin: request.session.admin, });
+                response.render('lists', {error: "Error", admin: request.session.admin, });
                 await client.close();
                 return
             }

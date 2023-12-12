@@ -217,7 +217,6 @@ exports.guestLogin = async function(request, response){
         response.render('login', { error: 'Error Creating Guest Account' } )
         } else {
             //response.redirect('/index.html');
-            request.session.userAc = userAc;
             response.redirect('/index.html');
         }
 

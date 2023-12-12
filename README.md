@@ -30,7 +30,8 @@ Make sure you have the following software installed before running the applicati
 
 # Usage
 
-Go to parent directory and start server.js
+   ```bash
+   node server.js
 
 # Contributing
 

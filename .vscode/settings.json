@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/e699e50a-64ba-4167-8f17-c29eaa50312a/resourceGroups/cloud-shell-storage-eastus/providers/Microsoft.Web/sites/finalproj",
+    "appService.deploySubpath": "."
+}

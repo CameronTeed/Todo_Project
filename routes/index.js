@@ -105,10 +105,10 @@ exports.getPool = async function(request, response){
                     });
                 
                     // Render the page with the pool
-                response.render('index', {admin: admin, pools: pool });
+                response.render('index', {admin: request.session.admin, pools: pool });
             } else {
                 // Error if the pool is not found
-                response.render('index', {error: "Error", admin: admin, });
+                response.render('index', {error: "Error", admin: request.session.admin, });
                 await client.close();
                 return
             }
@@ -151,7 +151,7 @@ exports.landing =  function(request, response){
     //serve up a simple index.html page
     */
    // Renders the landing page
-    response.render('landing', { admin: admin, pools: userAc.pools });
+    response.render('landing', { admin: request.session.admin, pools: request.session.userAc.pools });
 }
 
 exports.guestLogin = async function(request, response){ 
@@ -200,7 +200,7 @@ exports.guestLogin = async function(request, response){
             // Checks if user name is taken
             const result = await collection.insertOne(data);
             authorized = true;
-            userAc = data;
+            request.session.userAc = data;
             isGuest = true;
 
             const dbPool = client.db('Todo');
@@ -217,7 +217,7 @@ exports.guestLogin = async function(request, response){
         response.render('login', { error: 'Error Creating Guest Account' } )
         } else {
             //response.redirect('/index.html');
-            request.session.user = userAc;
+            request.session.userAc = userAc;
             response.redirect('/index.html');
         }
 
@@ -228,7 +228,7 @@ exports.guestLogin = async function(request, response){
 exports.postLogin = async function(request, response){
     // uses body parser to get the username and password
     const { username, password } = request.body;
-
+    
     console.log("User: ", username + " Password: ", password);
     // Error checking
     if (username === undefined || password === undefined || username === "" || password === "") {
@@ -251,11 +251,11 @@ exports.postLogin = async function(request, response){
               if (user.password == password) {
                   console.log('User is authorized');
                   authorized = true;
-                  userAc = user;
+                  request.session.userAc = user;
               } else if (bcrypt.compare(user.password, password)) {
                 console.log('User is authorized');
                 authorized = true;
-                userAc = user;
+                request.session.userAc = user;
               }
           }
 
@@ -269,9 +269,10 @@ exports.postLogin = async function(request, response){
         response.render('login', { error: 'Incorrect Username or Password' } )
         } else {
             //response.redirect('/index.html');
-            request.session.user = userAc;
-            if (userAc.level === "admin") {
+            // request.session.userAc = userAc;
+            if (request.session.userAc.level === "admin") {
                 admin = true
+                request.session.admin = true
             }
             response.redirect('/index.html');
         }
@@ -326,7 +327,7 @@ exports.postSignup = async function(request, response){
             // Checks if user name is taken
             const result = await collection.insertOne(data);
             authorized = true;
-            userAc = data;
+            request.session.userAc = data;
           }
 
       } catch {
@@ -340,7 +341,7 @@ exports.postSignup = async function(request, response){
         } else {
             //response.redirect('/index.html');
             request.session.user = userAc;
-            if (userAc.level === "admin") {
+            if (request.session.userAc.level === "admin") {
                 admin = true
             }
             response.redirect('/index.html');
@@ -366,7 +367,7 @@ exports.addPool = async function(request, response){
 
             const update = {
             $push: {
-                emails: userAc.email},
+                emails: request.session.userAc.email},
             };
 
             const options = {
@@ -377,7 +378,7 @@ exports.addPool = async function(request, response){
             pool = await collection.updateOne(query, update, options);
           
             if (pool.matchedCount === 0) {
-                response.render('landing', { admin: admin, error: "Invalid ID", pools: userAc.pools });
+                response.render('landing', { admin: request.session.admin, error: "Invalid ID", pools: request.session.userAc.pools });
                 return
             } 
 
@@ -397,7 +398,7 @@ exports.addPool = async function(request, response){
         console.log('Error');
     }
 
-    console.log("email" + userAc.email)
+    console.log("email" + request.session.userAc.email)
     console.log("pool              a " + poolFinal.poolName)
     // template to add the pool to the user
     const update = {
@@ -418,7 +419,7 @@ exports.addPool = async function(request, response){
         console.log('Connected correctly to server');
         const db = client.db('Todo');
         const collection = db.collection('Users');
-        const query = { _id: new ObjectId(userAc._id)};
+        const query = { _id: new ObjectId(request.session.userAc._id)};
         console.log(query)
         console.log(update)
         const result = await collection.updateOne(query, update);
@@ -429,8 +430,8 @@ exports.addPool = async function(request, response){
     }
 
     // Adding the pool info to our local user
-    userAc.pools.push(toAdd)
-    response.render('landing', {admin: admin, pools: userAc.pools });
+    request.session.userAc.pools.push(toAdd)
+    response.render('landing', {admin: request.session.admin, pools: request.session.userAc.pools });
 
 }
 
@@ -450,7 +451,7 @@ exports.addMessage = async function(request, response){
         toDo: jsonObject.toDo,
          state: jsonObject.state,
          status: jsonObject.status,
-        mID: new ObjectId(userAc._id),
+        mID: new ObjectId(request.session.userAc._id),
         _id: new ObjectId(),},
      },
     }
@@ -492,7 +493,7 @@ exports.addMessage = async function(request, response){
 
 // Checks if the user is an admin and renders the admin page
 exports.admin = async function(request, response){
-    if (userAc.level != "admin") {
+    if (request.session.userAc.level != "admin") {
         response.send("You are not an admin")
         return
     }
@@ -597,7 +598,7 @@ exports.createGroup = async function(request, response){
     _id: new ObjectId(),
     poolName: jsonObject.message,
     Messages: [],
-    emails: [userAc.email]
+    emails: [request.session.userAc.email]
    }
    let pool = {}
    // First make the pool
@@ -628,7 +629,7 @@ exports.createGroup = async function(request, response){
         console.log('Connected correctly to server');
         const db = client.db('Todo');
         const collection = db.collection('Users');
-        const query = { _id: new ObjectId(userAc._id)};
+        const query = { _id: new ObjectId(request.session.userAc._id)};
         const result = await collection.updateOne(query, update);
         console.log(result)
 
@@ -636,7 +637,7 @@ exports.createGroup = async function(request, response){
         console.log('Error');
     }
     // Add it tothe local array
-    userAc.pools.push(toAdd)
+    request.session.userAc.pools.push(toAdd)
     response.json({ message: 'POST request received successfully' });
     
 }
@@ -649,7 +650,7 @@ exports.logout = async function(request, response){
 
 // Displayes simple account info
 exports.account = async function(request, response){
-    response.render('account', {username: userAc.userName, email: userAc.email});
+    response.render('account', {username: request.session.userAc.userName, email: request.session.userAc.email});
 }
 
 // Short info about the app
@@ -715,8 +716,8 @@ exports.deleteAccount = async function(request, response){
         console.log('Connected correctly to server');
         const db = client.db('Todo');
         const collection = db.collection('Users');
-        console.log("current id" + userAc._id)
-        const query = { _id: new ObjectId(userAc._id)};
+        console.log("current id" + request.session.userAc._id)
+        const query = { _id: new ObjectId(request.session.userAc._id)};
         console.log(query)
         const result = await collection.deleteOne(query);
         console.log(result)

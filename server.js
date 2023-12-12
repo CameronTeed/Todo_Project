@@ -22,6 +22,7 @@ app.use(session({
   secret: 'your_secret_key',
   resave: false,
   saveUninitialized: true,
+  admin: undefined
 }));
 
 app.use(express.static(__dirname + '/public')) //static server for publc  files
@@ -33,7 +34,7 @@ app.use((req, res, next) => {
 
 // Queue up messages using run-queue
   // If user is not logged in and on a protected route, redirect to login
-  if (!req.session.user && !excludedRoutes.includes(req.path)) {
+  if (!req.session.userAc && !excludedRoutes.includes(req.path)) {
     res.redirect('/login');
   } else {
     // Calls next registered middleware when the user is authenticated
@@ -68,7 +69,7 @@ app.get('/getPool', routes.getPool);
 app.get('/addPool', routes.addPool);
 app.post('/addMessage', routes.addMessage);
 app.get('/addMessage', routes.addMessage);
-app.get('/admin', routes.admin);
+app.get('/admin', routes.admin); // fix
 app.post('/updateStatus', routes.updateStatus);
 app.post('/createGroup', routes.createGroup);
 app.get('/account', routes.account)

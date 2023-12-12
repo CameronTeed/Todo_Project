@@ -29,10 +29,9 @@ Make sure you have the following software installed before running the applicati
    git clone https://github.com/CameronTeed/Todo_Project
 
 # Usage
-
    ```bash
    node server.js
-
+  ```
 # Contributing
 
 Fork Branch and create pull request

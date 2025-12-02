@@ -2,13 +2,13 @@
 // Holds admin state and user info
 let userAc = {}
 let admin = undefined
-var keys = require('./config.js');
+require('dotenv').config();
 // email api stuff
 const Mailjet = require ('node-mailjet');
 const exp = require('constants');
-const mailjet = Mailjet.apiConnect(keys.email_key, keys.secret_key);
+const mailjet = Mailjet.apiConnect(process.env.MAILJET_API_KEY, process.env.MAILJET_SECRET_KEY);
 const { MongoClient, ObjectId } = require('mongodb');
-const client = new MongoClient(keys.uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const client = new MongoClient(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 var connected = false;
 var isGuest = false;
 const bcrypt = require('bcryptjs');
